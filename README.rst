@@ -1,5 +1,5 @@
 pyramid_redirect
-===============
+================
 
 ------------
 Introduction
