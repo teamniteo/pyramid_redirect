@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """
-This is a small pyramid extension that allows to add rules for rewriting
+This is a small pyramid extension that allows to add rules for redirecting
 the PATH_INFO portion of a requested URL.
 
 Usage example:
     def main(global_config, **settings):
         config = Configurator(settings=settings)
-        config.include('pyramid_rewrite')
-        # add url rewriting rules...
+        config.include('pyramid_redirect')
+        # add url redirecting rules...
         #   first parameter is a regular expression
         #   second parameter is the target url
-        config.add_rewrite_rule(r'/favicon.ico', r'/static/favicon.ico')
-        config.add_rewrite_rule(r'/gallery/(?P<subpath>.*)',
+        config.add_redirect_rule(r'/favicon.ico', r'/static/favicon.ico')
+        config.add_redirect_rule(r'/gallery/(?P<subpath>.*)',
                                 r'/root/%(subpath)s')
         #
         # ... rest of configuration
@@ -27,6 +27,7 @@ Usage example:
 # Copyright 2012 Benjamin Hepp
 
 
+from pyramid.httpexceptions import HTTPFound
 import logging
 import re
 
@@ -38,39 +39,39 @@ __version__ = 0.2
 
 # Add configuration directive
 def includeme(config):
-    config.add_directive('add_rewrite_rule', add_rewrite_rule)
-    config.add_tween('pyramid_rewrite.rewrite_tween_factory')
+    config.add_directive('add_redirect_rule', add_redirect_rule)
+    config.add_tween('pyramid_redirect.redirect_tween_factory')
 
 
-# Configuration directive for adding a rewrite rule
-def add_rewrite_rule(config, pattern, target):
+# Configuration directive for adding a redirect rule
+def add_redirect_rule(config, pattern, target):
     tpattern = pattern
     if not pattern.startswith(r'^'):
         tpattern = '^' + tpattern
     if not pattern.endswith(r'$'):
         tpattern = tpattern + r'$'
     cpattern = re.compile(tpattern)
-    if not hasattr(config.registry, 'rewrite_rules'):
-        config.registry.rewrite_rules = []
-    config.registry.rewrite_rules.append((pattern, cpattern, target))
+    if not hasattr(config.registry, 'redirect_rules'):
+        config.registry.redirect_rules = []
+    config.registry.redirect_rules.append((pattern, cpattern, target))
 
-# Tween to perform URL rewriting before a request is handled by Pyramid
-def rewrite_tween_factory(handler, registry):
+# Tween to perform URL redirecting before a request is handled by Pyramid
+def redirect_tween_factory(handler, registry):
 
-    if not hasattr(registry, 'rewrite_rules'):
+    if not hasattr(registry, 'redirect_rules'):
         return handler
 
-    def rewrite_tween(request):
-        for pattern, cpattern, target in request.registry.rewrite_rules:
-            path_info = request.path_info
-            logger.debug('Matching pattern "%s" against "%s" ' \
-                        % (pattern, path_info))
-            mo = cpattern.match(path_info)
+    def redirect_tween(request):
+        for pattern, cpattern, target in request.registry.redirect_rules:
+            url = request.url
+            logger.info('Matching pattern "%s" against "%s" ' \
+                        % (pattern, url))
+            mo = cpattern.match(url)
             if mo is not None:
-                path_info = target % mo.groupdict()
-                logger.debug('Rewriting url: %s --> %s' \
-                            % (request.path_info, path_info))
-                request.path_info = path_info
+                url = target % mo.groupdict()
+                logger.info('Redirecting url: %s --> %s' \
+                            % (request.url, url))
+                return HTTPFound(url)
         return handler(request)
 
-    return rewrite_tween
+    return redirect_tween

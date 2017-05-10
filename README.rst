@@ -1,11 +1,11 @@
-pyramid_rewrite
+pyramid_redirect
 ===============
 
 ------------
 Introduction
 ------------
 
-pyramid_rewrite is a small extension for `Pyramid <http://www.pylonsproject.org/>`_ to rewrite urls before further processing takes place.
+pyramid_redirect is a small extension for `Pyramid <http://www.pylonsproject.org/>`_ to redirect urls before further processing takes place.
 
 ------------
 Installation
@@ -13,17 +13,17 @@ Installation
 
 Just do
 
-``pip install pyramid_rewrite``
+``pip install pyramid_redirect``
 
 or
 
-``easy_install pyramid_rewrite``
+``easy_install pyramid_redirect``
 
 -------------
 Compatibility
 -------------
 
-pyramid_rewrite runs with pyramid>=1.3 and python>=2.6 and python>=3.2.
+pyramid_redirect runs with pyramid>=1.3 and python>=2.7 and python>=3.5.
 Other versions might also work.
 
 -------------
@@ -34,18 +34,18 @@ Usage example::
 
     def main(global_config, **settings):
         config = Configurator(settings=settings)
-        config.include('pyramid_rewrite')
-        # add url rewriting rules...
+        config.include('pyramid_redirect')
+        # add url redirecting rules...
         #   first parameter is a regular expression
         #   second parameter is the target url
-        config.add_rewrite_rule(r'/favicon.ico', r'/static/favicon.ico')
-        config.add_rewrite_rule(r'/gallery/(?P<subpath>.*)',
-                                r'/root/%(subpath)s')
+        config.add_redirect_rule(r'http://example\.com/favicon.ico', r'http://example.com/static/favicon.ico')
+        config.add_redirect_rule(r'http://example\.com/gallery/(?P<subpath>.*)',
+                                r'http://example.com/root/%(subpath)s')
         #
         # ... rest of configuration
         #
         # return WSGI application instance
         return config.make_wsgi_app()
 
-Better documentation might follow.
+See tests for more examples.
 

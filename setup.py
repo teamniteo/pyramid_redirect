@@ -16,9 +16,9 @@ requires=[
 ]
 
 setup(
-    name='pyramid_rewrite',
-    version='0.2',
-    description='Small Pyramid extension for rewriting urls',
+    name='pyramid_redirect',
+    version='0.1',
+    description='Small Pyramid extension for redirecting urls',
     long_description=readme + '\n' + changes,
     classifiers=[
         "Operating System :: OS Independent",
@@ -31,15 +31,13 @@ setup(
         "Topic :: Internet :: WWW/HTTP :: WSGI",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
-    #packages=find_packages(),
-    packages=['pyramid_rewrite'],
+    packages=['pyramid_redirect'],
     install_requires=requires,
-    author='Benjamin Hepp',
-    author_email='benjamin.hepp@gmail.com',
+    author='NiteoWeb Ltd.',
+    author_email='info@niteoweb.com',
     license='BSD',
-    url='https://github.com/bennihepp/pyramid_rewrite',
-    keywords='pyramid rewrite pylons web',
+    url='https://github.com/niteoweb/pyramid_redirect',
+    keywords='pyramid redirect pylons web',
     tests_require=requires,
-    test_suite='pyramid_rewrite',
+    test_suite='pyramid_redirect',
 )
-
