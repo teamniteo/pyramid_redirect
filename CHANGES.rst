@@ -2,6 +2,13 @@
 Changes
 =======
 
+0.1.1
+-----
+
+* Brown bag release.
+  [zupo]
+
+
 0.1
 ---
 
