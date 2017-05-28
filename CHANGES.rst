@@ -2,6 +2,13 @@
 Changes
 =======
 
+0.2
+---
+
+* Support for structlog.
+  [zupo]
+
+
 0.1.1
 -----
 
