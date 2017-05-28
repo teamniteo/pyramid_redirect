@@ -31,8 +31,6 @@ from pyramid.httpexceptions import HTTPFound
 import logging
 import re
 
-logger = logging.getLogger(__name__)
-
 
 __version__ = 0.2
 
@@ -64,13 +62,25 @@ def redirect_tween_factory(handler, registry):
     def redirect_tween(request):
         for pattern, cpattern, target in request.registry.redirect_rules:
             url = request.url
-            logger.info('Matching pattern "%s" against "%s" ' \
-                        % (pattern, url))
+            if request.registry.settings.get('pyramid_redirect.structlog'):
+                import structlog
+                logger = structlog.getLogger(__name__)
+                logger.debug('Matching Pattern', pattern=pattern, url=url)
+            else:
+                logger = logging.getLogger(__name__)
+                logger.debug('Matching pattern "%s" against "%s" ' \
+                    % (pattern, url))
             mo = cpattern.match(url)
             if mo is not None:
                 url = target % mo.groupdict()
-                logger.info('Redirecting url: %s --> %s' \
-                            % (request.url, url))
+                if request.registry.settings.get('pyramid_redirect.structlog'):
+                    import structlog
+                    logger = structlog.getLogger(__name__)
+                    logger.info('URL Redirected', from_=request.url, to=url)
+                else:
+                    logger = logging.getLogger(__name__)
+                    logger.info('Redirecting url: %s --> %s' \
+                        % (request.url, url))
                 return HTTPFound(url)
         return handler(request)
 

@@ -28,9 +28,9 @@ class TestRedirectTween(unittest.TestCase):
         return tween(request)
 
     def test_redirect_no_rules(self):
-        request = testing.DummyRequest(path='/abc')
+        request = testing.DummyRequest(url='http://example.com/abc')
         self._callFUT(request)
-        self.assertEqual(request.path_info, r'/abc')
+        self.assertEqual(request.path_info, r'/')
 
     def test_redirect_rule1(self):
         self.config.add_redirect_rule(

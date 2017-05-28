@@ -20,6 +20,8 @@ var
 sdist
 develop-eggs
 .installed.cfg
+.eggs/
+pip-selfcheck.json
 
 # Installer logs
 pip-log.txt

@@ -49,3 +49,7 @@ Usage example::
 
 See tests for more examples.
 
+If you use structlog, add the following configuration setting to your INI file to enable structlog-like logging::
+
+    pyramid_redirect.structlog = true
+
