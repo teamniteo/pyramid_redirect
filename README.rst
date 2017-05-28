@@ -53,3 +53,11 @@ If you use structlog, add the following configuration setting to your INI file t
 
     pyramid_redirect.structlog = true
 
+
+Releasing
+---------
+
+#. Update CHANGES.rst.
+#. Update setup.py version.
+#. Run ``bin/longtest``.
+#. Run ``bin/mkrelease -d pypi``.
