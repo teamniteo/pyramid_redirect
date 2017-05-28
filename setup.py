@@ -17,7 +17,7 @@ requires=[
 
 setup(
     name='pyramid_redirect',
-    version='0.1.1',
+    version='0.2',
     description='Small Pyramid extension for redirecting urls',
     long_description=readme + '\n' + changes,
     classifiers=[
