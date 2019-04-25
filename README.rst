@@ -40,7 +40,8 @@ Usage example::
         #   second parameter is the target url
         config.add_redirect_rule(r'http://example\.com/favicon.ico', r'http://example.com/static/favicon.ico')
         config.add_redirect_rule(r'http://example\.com/gallery/(?P<subpath>.*)',
-                                r'http://example.com/root/%(subpath)s')
+                                r'http://example.com/root/%(subpath)s',
+                                permanent=True)
         #
         # ... rest of configuration
         #

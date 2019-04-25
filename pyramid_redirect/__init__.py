@@ -26,13 +26,13 @@ Usage example:
 #
 # Copyright 2012 Benjamin Hepp
 
-
 from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPMovedPermanently
 import logging
 import re
 
 
-__version__ = 0.2
+__version__ = 0.3
 
 
 # Add configuration directive
@@ -42,7 +42,7 @@ def includeme(config):
 
 
 # Configuration directive for adding a redirect rule
-def add_redirect_rule(config, pattern, target):
+def add_redirect_rule(config, pattern, target, permanent=False):
     tpattern = pattern
     if not pattern.startswith(r'^'):
         tpattern = '^' + tpattern
@@ -51,7 +51,7 @@ def add_redirect_rule(config, pattern, target):
     cpattern = re.compile(tpattern)
     if not hasattr(config.registry, 'redirect_rules'):
         config.registry.redirect_rules = []
-    config.registry.redirect_rules.append((pattern, cpattern, target))
+    config.registry.redirect_rules.append((pattern, cpattern, target, permanent))
 
 # Tween to perform URL redirecting before a request is handled by Pyramid
 def redirect_tween_factory(handler, registry):
@@ -60,7 +60,7 @@ def redirect_tween_factory(handler, registry):
         return handler
 
     def redirect_tween(request):
-        for pattern, cpattern, target in request.registry.redirect_rules:
+        for pattern, cpattern, target, permanent in request.registry.redirect_rules:
             url = request.url
             if request.registry.settings.get('pyramid_redirect.structlog'):
                 import structlog
@@ -81,7 +81,10 @@ def redirect_tween_factory(handler, registry):
                     logger = logging.getLogger(__name__)
                     logger.info('Redirecting url: %s --> %s' \
                         % (request.url, url))
-                return HTTPFound(url)
+                if permanent:
+                    return HTTPMovedPermanently(url)
+                else:
+                    return HTTPFound(url)
         return handler(request)
 
     return redirect_tween
