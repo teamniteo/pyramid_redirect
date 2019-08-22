@@ -8,7 +8,6 @@ Changes
 * Add option for permanent (301) redirects.
   [am-on]
 
-
 0.2
 ---
 
