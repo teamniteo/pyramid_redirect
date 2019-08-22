@@ -39,23 +39,29 @@ class TestRedirectTween(unittest.TestCase):
         )
         request = testing.DummyRequest(url='http://example.com/abc/qwe15/get')
         result = self._callFUT(request)
+        self.assertEqual(result.status_code, 302)
         self.assertEqual(result.location, r'http://example.com/get/15')
 
     def test_redirect_rule2(self):
         self.config.add_redirect_rule(
             r'http://example\.com/(?P<user>[a-zA-Z0-9_]+)/(?P<what>[a-zA-Z0-9_]+)/(?P<op>[a-zA-Z]+)',  # noqa
             'http://example.com/%(op)s(%(user)s.%(what)s)',
+            permanent=False,
         )
         request = testing.DummyRequest(url='http://example.com/root/foo/get')
         result = self._callFUT(request)
+        self.assertEqual(result.status_code, 302)
         self.assertEqual(result.location, r'http://example.com/get(root.foo)')
 
     def test_redirect_rule3(self):
         self.config.add_redirect_rule(
             r'http://example\.com/favicon\.ico',
-            'http://example.com/static/favicon.ico')
+            'http://example.com/static/favicon.ico',
+            permanent=True
+        )
         request = testing.DummyRequest(url='http://example.com/favicon.ico')
         result = self._callFUT(request)
+        self.assertEqual(result.status_code, 301)
         self.assertEqual(result.location, r'http://example.com/static/favicon.ico')  # noqa
 
     def test_redirect_rule4(self):
