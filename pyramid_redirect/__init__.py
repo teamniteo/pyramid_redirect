@@ -42,7 +42,7 @@ def includeme(config):
 
 
 # Configuration directive for adding a redirect rule
-def add_redirect_rule(config, pattern, target, permanent=False):
+def add_redirect_rule(config, pattern, target, permanent=False, headers=None):
     tpattern = pattern
     if not pattern.startswith(r"^"):
         tpattern = "^" + tpattern
@@ -51,7 +51,9 @@ def add_redirect_rule(config, pattern, target, permanent=False):
     cpattern = re.compile(tpattern)
     if not hasattr(config.registry, "redirect_rules"):
         config.registry.redirect_rules = []
-    config.registry.redirect_rules.append((pattern, cpattern, target, permanent))
+    config.registry.redirect_rules.append(
+        (pattern, cpattern, target, permanent, headers)
+    )
 
 
 # Tween to perform URL redirecting before a request is handled by Pyramid
@@ -61,7 +63,13 @@ def redirect_tween_factory(handler, registry):
         return handler
 
     def redirect_tween(request):
-        for pattern, cpattern, target, permanent in request.registry.redirect_rules:
+        for (
+            pattern,
+            cpattern,
+            target,
+            permanent,
+            headers,
+        ) in request.registry.redirect_rules:
             url = request.url
             if request.registry.settings.get("pyramid_redirect.structlog"):
                 import structlog
@@ -83,9 +91,9 @@ def redirect_tween_factory(handler, registry):
                     logger = logging.getLogger(__name__)
                     logger.info("Redirecting url: %s --> %s" % (request.url, url))
                 if permanent:
-                    return HTTPMovedPermanently(url)
+                    return HTTPMovedPermanently(url, headers=headers)
                 else:
-                    return HTTPFound(url)
+                    return HTTPFound(url, headers=headers)
         return handler(request)
 
     return redirect_tween
