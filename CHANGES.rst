@@ -7,6 +7,7 @@ Changes
 
 * Support for setting response headers.
 * Format code with Black.
+* Rename niteoweb -> teamniteo.
   [am-on]
 
 

@@ -1,4 +1,4 @@
-Copyright (c) 2017 and NiteoWeb Ltd, based on 2012 work from Benjamin Hepp.
+Copyright (c) 2022 and Niteo GmbH, based on 2012 work from Benjamin Hepp.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are
