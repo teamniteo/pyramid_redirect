@@ -7,19 +7,19 @@ import multiprocessing
 from setuptools import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
-readme = open(os.path.join(here, 'README.rst')).read()
-changes = open(os.path.join(here, 'CHANGES.rst')).read()
+readme = open(os.path.join(here, "README.rst")).read()
+changes = open(os.path.join(here, "CHANGES.rst")).read()
 
 
-requires=[
-    'pyramid>=1.3a6',
+requires = [
+    "pyramid>=1.3a6",
 ]
 
 setup(
-    name='pyramid_redirect',
-    version='0.3',
-    description='Small Pyramid extension for redirecting urls',
-    long_description=readme + '\n' + changes,
+    name="pyramid_redirect",
+    version="0.3",
+    description="Small Pyramid extension for redirecting urls",
+    long_description=readme + "\n" + changes,
     classifiers=[
         "Operating System :: OS Independent",
         "License :: OSI Approved :: BSD License",
@@ -30,14 +30,14 @@ setup(
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        ],
-    packages=['pyramid_redirect'],
+    ],
+    packages=["pyramid_redirect"],
     install_requires=requires,
-    author='NiteoWeb Ltd.',
-    author_email='info@niteoweb.com',
-    license='BSD',
-    url='https://github.com/niteoweb/pyramid_redirect',
-    keywords='pyramid redirect pylons web',
+    author="NiteoWeb Ltd.",
+    author_email="info@niteoweb.com",
+    license="BSD",
+    url="https://github.com/niteoweb/pyramid_redirect",
+    keywords="pyramid redirect pylons web",
     tests_require=requires,
-    test_suite='pyramid_redirect',
+    test_suite="pyramid_redirect",
 )
