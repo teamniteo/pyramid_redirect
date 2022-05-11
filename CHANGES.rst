@@ -2,11 +2,20 @@
 Changes
 =======
 
+0.4
+---
+
+* Support for setting response headers.
+* Format code with Black.
+  [am-on]
+
+
 0.3
 ---
 
 * Add option for permanent (301) redirects.
   [am-on]
+
 
 0.2
 ---

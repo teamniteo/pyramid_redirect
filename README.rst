@@ -39,9 +39,12 @@ Usage example::
         #   first parameter is a regular expression
         #   second parameter is the target url
         config.add_redirect_rule(r'http://example\.com/favicon.ico', r'http://example.com/static/favicon.ico')
-        config.add_redirect_rule(r'http://example\.com/gallery/(?P<subpath>.*)',
-                                r'http://example.com/root/%(subpath)s',
-                                permanent=True)
+        config.add_redirect_rule(
+            r'http://example\.com/gallery/(?P<subpath>.*)',
+            r'http://example.com/root/%(subpath)s',
+            permanent=True,
+            headers={'X-Value': 'foo'}
+        )
         #
         # ... rest of configuration
         #

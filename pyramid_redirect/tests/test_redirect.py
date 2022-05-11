@@ -58,10 +58,12 @@ class TestRedirectTween(unittest.TestCase):
             r"http://example\.com/favicon\.ico",
             "http://example.com/static/favicon.ico",
             permanent=True,
+            headers={"X-Something": "something"},
         )
         request = testing.DummyRequest(url="http://example.com/favicon.ico")
         result = self._callFUT(request)
         self.assertEqual(result.status_code, 301)
+        self.assertEqual(result.headers["X-Something"], "something")
         self.assertEqual(
             result.location, r"http://example.com/static/favicon.ico"
         )  # noqa
